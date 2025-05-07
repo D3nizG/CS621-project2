@@ -1,43 +1,43 @@
-// source-ip-address.cc
-#include "source-ip-address.h"
+// dest-ip-address.cc
+#include "dest-ip-address.h"
 #include "ns3/log.h"
 #include "ns3/ipv4-header.h"
 
 namespace ns3 {
 
-NS_LOG_COMPONENT_DEFINE ("SourceIpAddress");
-NS_OBJECT_ENSURE_REGISTERED (SourceIpAddress);
+NS_LOG_COMPONENT_DEFINE ("DestIpAddress");
+NS_OBJECT_ENSURE_REGISTERED (DestIpAddress);
 
 TypeId
-SourceIpAddress::GetTypeId (void)
+DestIpAddress::GetTypeId (void)
 {
-  static TypeId tid = TypeId ("ns3::SourceIpAddress")
+  static TypeId tid = TypeId ("ns3::DestIpAddress")
     .SetParent<FilterElement> ()
     .SetGroupName ("Network")
-    .AddConstructor<SourceIpAddress> ()
+    .AddConstructor<DestIpAddress> ()
   ;
   return tid;
 }
 
-SourceIpAddress::SourceIpAddress () :
+DestIpAddress::DestIpAddress () :
   m_address (Ipv4Address::GetAny ())
 {
   NS_LOG_FUNCTION (this);
 }
 
-SourceIpAddress::SourceIpAddress (Ipv4Address addr) :
+DestIpAddress::DestIpAddress (Ipv4Address addr) :
   m_address (addr)
 {
   NS_LOG_FUNCTION (this << addr);
 }
 
-SourceIpAddress::~SourceIpAddress ()
+DestIpAddress::~DestIpAddress ()
 {
   NS_LOG_FUNCTION (this);
 }
 
 bool
-SourceIpAddress::Match (Ptr<Packet> p)
+DestIpAddress::Match (Ptr<Packet> p)
 {
   NS_LOG_FUNCTION (this << p);
   
@@ -48,8 +48,8 @@ SourceIpAddress::Match (Ptr<Packet> p)
   Ipv4Header ipHeader;
   if (copy->PeekHeader (ipHeader))
     {
-      NS_LOG_LOGIC ("Found IPv4 header, source IP = " << ipHeader.GetSource ());
-      return ipHeader.GetSource () == m_address;
+      NS_LOG_LOGIC ("Found IPv4 header, destination IP = " << ipHeader.GetDestination ());
+      return ipHeader.GetDestination () == m_address;
     }
   
   NS_LOG_LOGIC ("No IPv4 header found");
@@ -57,14 +57,14 @@ SourceIpAddress::Match (Ptr<Packet> p)
 }
 
 void
-SourceIpAddress::SetAddress (Ipv4Address addr)
+DestIpAddress::SetAddress (Ipv4Address addr)
 {
   NS_LOG_FUNCTION (this << addr);
   m_address = addr;
 }
 
 Ipv4Address
-SourceIpAddress::GetAddress (void) const
+DestIpAddress::GetAddress (void) const
 {
   NS_LOG_FUNCTION (this);
   return m_address;
